@@ -24,11 +24,21 @@ class Notifier(NullNotifier):
 
         for prop in properties:
             logging.info(f"Notifying about {prop['url']}")
-            self.bot.send_message(chat_id=self.config['chat_id'],
-                                  text=f"[{prop['title']}]({prop['url']})",
-                                  parse_mode=telegram.ParseMode.MARKDOWN)
-            # To avoid hitting 20 msg/minute and 1 msg/second limits
-            time.sleep(1.1)
+
+            while True:
+                try:
+                    self.bot.send_message(chat_id=self.config['chat_id'],
+                                          text=f"[{prop['title']}]({prop['url']})",
+                                          parse_mode=telegram.ParseMode.MARKDOWN)
+                    # TODO Make this configurable
+                    time.sleep(10)
+                    break
+                except telegram.TelegramError as e:
+                    logging.warn(e)
+                    logging.info(
+                        "Hit Telegram rate limit, will sleep for 30 seconds and retry")
+                    # TODO Make this configurable
+                    time.sleep(30)
 
     @staticmethod
     def get_instance(config):
