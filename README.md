@@ -17,6 +17,10 @@ To install dependencies:
 
 `pip3 install -r requirements.txt`
 
+In Linux, this might fail if you don't have some libraries. Install them like this in Debian-like distros:
+
+`sudo apt-get install libxml2-dev libxmlsec1-dev`
+
 ## Configuration
 
 There's a `configuration.sample.yml` that you can use as a template for your configuration. Copy that file to a new one in the root folder and name it `configuration.yml`
