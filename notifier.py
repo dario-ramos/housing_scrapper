@@ -3,10 +3,13 @@
 import telegram
 import logging
 import numpy as np
+import time
+
 
 class NullNotifier:
     def notify(self, properties):
         pass
+
 
 class Notifier(NullNotifier):
     def __init__(self, config):
@@ -21,9 +24,11 @@ class Notifier(NullNotifier):
 
         for prop in properties:
             logging.info(f"Notifying about {prop['url']}")
-            self.bot.send_message(chat_id=self.config['chat_id'], 
-                    text=f"[{prop['title']}]({prop['url']})",
-                    parse_mode=telegram.ParseMode.MARKDOWN)
+            self.bot.send_message(chat_id=self.config['chat_id'],
+                                  text=f"[{prop['title']}]({prop['url']})",
+                                  parse_mode=telegram.ParseMode.MARKDOWN)
+            # To avoid hitting 20 msg/minute and 1 msg/second limits
+            time.sleep(1.1)
 
     @staticmethod
     def get_instance(config):
