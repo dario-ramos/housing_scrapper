@@ -5,6 +5,8 @@ from providers.argenprop import Argenprop
 from providers.mercadolibre import Mercadolibre
 from providers.properati import Properati
 from providers.inmobusqueda import Inmobusqueda
+from providers.remax import Remax
+
 
 def register_property(conn, prop):
     stmt = 'INSERT INTO properties (internal_id, provider, url) VALUES (:internal_id, :provider, :url)'
@@ -12,6 +14,7 @@ def register_property(conn, prop):
         conn.execute(stmt, prop)
     except Exception as e:
         print(e)
+
 
 def process_properties(provider_name, provider_data):
     provider = get_instance(provider_name, provider_data)
@@ -28,7 +31,8 @@ def process_properties(provider_name, provider_data):
         for prop in provider.next_prop():
             cur = conn.cursor()
             logging.info(f"Processing property {prop['internal_id']}")
-            cur.execute(stmt, {'internal_id': prop['internal_id'], 'provider': prop['provider']})
+            cur.execute(
+                stmt, {'internal_id': prop['internal_id'], 'provider': prop['provider']})
             result = cur.fetchone()
             cur.close()
             if result == None:
@@ -36,8 +40,9 @@ def process_properties(provider_name, provider_data):
                 logging.info('It is a new one')
                 register_property(conn, prop)
                 new_properties.append(prop)
-                    
+
     return new_properties
+
 
 def get_instance(provider_name, provider_data):
     if provider_name == 'zonaprop':
@@ -50,5 +55,7 @@ def get_instance(provider_name, provider_data):
         return Properati(provider_name, provider_data)
     elif provider_name == 'inmobusqueda':
         return Inmobusqueda(provider_name, provider_data)
+    elif provider_name == 'remax':
+        return Remax(provider_name, provider_data)
     else:
         raise Exception('Unrecognized provider')
