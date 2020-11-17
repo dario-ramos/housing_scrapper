@@ -25,3 +25,5 @@ for provider_name, provider_data in cfg['providers'].items():
 
 if len(new_properties) > 0:
     notifier.notify(new_properties)
+else:
+    logging.info("No new properties found :(")
