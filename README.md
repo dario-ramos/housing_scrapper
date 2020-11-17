@@ -19,7 +19,7 @@ To install dependencies:
 
 In Linux, this might fail if you don't have some libraries. Install them like this in Debian-like distros:
 
-`sudo apt-get install libxml2-dev libxmlsec1-dev`
+`sudo apt-get install libxml2-dev libxmlsec1-dev libffi-dev`
 
 ## Configuration
 
