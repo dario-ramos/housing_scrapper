@@ -1,6 +1,7 @@
-from bs4 import BeautifulSoup
+import hashlib
 import logging
 import urllib.parse as urlparse
+from bs4 import BeautifulSoup
 from providers.base_provider import BaseProvider
 
 
@@ -35,7 +36,8 @@ class Rogliano(BaseProvider):
 
     def scrape_property(self, prop, source):
         link = self.provider_data['base_url'] + source
-        internal_id = 'unknown'
+        internal_id = 'unknown_' + \
+            hashlib.sha256(str(prop).encode('utf-8')).hexdigest()
         btn_consultar = prop.find('a', class_='btn_consultar3')
         if btn_consultar != None:
             link = self.provider_data['base_url'] + '/' + btn_consultar['href']
