@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+
 import sqlite3
+
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -11,8 +14,9 @@ def create_connection(db_file):
         return conn
     except Exception as e:
         print(e)
- 
+
     return None
+
 
 def execute(conn, sql):
     try:
@@ -22,6 +26,7 @@ def execute(conn, sql):
         c.close()
     except Exception as e:
         print(e)
+
 
 database = "properties.db"
 
@@ -44,6 +49,4 @@ with conn:
         # create properties indexes
         execute(conn, sql_create_index_on_properties_table)
     else:
-        print("Error! cannot create the database connection.")        
-
-       
+        print("Error! cannot create the database connection.")
