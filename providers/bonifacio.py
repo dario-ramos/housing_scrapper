@@ -15,11 +15,11 @@ class Bonifacio(BaseProvider):
     def props_in_source(self, source):
         page_link = self.provider_data['base_url'] + source
         page = 1
-        pageCount = None
-        driverOptions = Options()
-        driverOptions.headless = True
+        page_count = None
+        driver_options = Options()
+        driver_options.headless = True
         driver = webdriver.Chrome(
-            options=driverOptions, executable_path=self.provider_data['chromedriver'])
+            options=driver_options, executable_path=self.provider_data['chromedriver'])
         timeout = self.provider_data['timeout']
 
         while True:
@@ -28,14 +28,14 @@ class Bonifacio(BaseProvider):
             if len(properties) == 0:
                 break
 
-            if pageCount == None:
-                pageCount = self.get_page_count(page_content)
+            if page_count == None:
+                page_count = self.get_page_count(page_content)
 
             for prop in properties:
                 yield self.scrape_property(prop, source)
 
             page += 1
-            if page > pageCount:
+            if page > page_count:
                 break
             else:
                 page_link = set_query_param(page_link, 'page', page, False)

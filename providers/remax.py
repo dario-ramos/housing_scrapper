@@ -19,12 +19,12 @@ class Remax(BaseProvider):
     def props_in_source(self, source):
         page_link = self.provider_data['base_url'] + source
         page = 1
-        driverOptions = Options()
-        driverOptions.headless = True
+        driver_options = Options()
+        driver_options.headless = True
         driver = webdriver.Chrome(
-            options=driverOptions, executable_path=self.provider_data['chromedriver'])
+            options=driver_options, executable_path=self.provider_data['chromedriver'])
         timeout = self.provider_data['timeout']
-        pageCount = None
+        page_count = None
 
         while True:
             properties, page_content = self.scrape_properties(
@@ -32,14 +32,14 @@ class Remax(BaseProvider):
             if len(properties) == 0:
                 break
 
-            if pageCount == None:
-                pageCount = self.getPageCount(page_content)
+            if page_count == None:
+                page_count = self.getPageCount(page_content)
 
             for prop in properties:
                 yield self.scrape_property(prop)
 
             page += 1
-            if page > pageCount:
+            if page > page_count:
                 break
             else:
                 page_link = set_query_param(page_link, 'CurrentPage', page)
