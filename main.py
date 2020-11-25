@@ -17,18 +17,22 @@ with open("configuration.yml", 'r') as ymlfile:
 
 notifier = Notifier.get_instance(cfg['notifier'])
 
-new_properties = []
+new_prop_count = 0
 for provider_name, provider_data in cfg['providers'].items():
     try:
         logging.info(f"Processing provider {provider_name}")
-        new_properties += process_properties(provider_name, provider_data)
+        new_properties = process_properties(provider_name, provider_data)
         if len(new_properties) > 0:
-            notifier.notify(new_properties)
             logging.info(
-                f"Done! Found {len(new_properties)} new properties :)")
+                f"Found {len(new_properties)} new properties for provider {provider_name} :)")
+            notifier.notify(new_properties)
+            new_prop_count += len(new_properties)
         else:
-            logging.info("No new properties found :(")
+            logging.info(
+                f"No new properties found for provider {provider_name} :(")
     except Exception as e:
         logging.error(
             f"Error processing provider {provider_name}.\n{sys.exc_info()[0]}")
         print(''.join(traceback.format_exception(None, e, e.__traceback__)))
+
+logging.info(f"Done! Found a total of {new_prop_count} new properties")

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 import logging
-from urllib.parse import urlparse, ParseResult, parse_qs, urlencode
+from providers.urlhelper import set_query_param
 
 from providers.base_provider import BaseProvider
 
@@ -31,8 +31,6 @@ class Remax(BaseProvider):
                 page_link, driver, timeout)
             if len(properties) == 0:
                 break
-            else:
-                logging.info("Found %d properties to scrape", len(properties))
 
             if pageCount == None:
                 pageCount = self.getPageCount(page_content)
@@ -44,7 +42,7 @@ class Remax(BaseProvider):
             if page > pageCount:
                 break
             else:
-                page_link = self.get_next_page_link(page_link, page)
+                page_link = set_query_param(page_link, 'CurrentPage', page)
 
     def scrape_properties(self, page_link, driver, timeout):
         logging.info(f"Requesting {page_link}")
@@ -88,11 +86,3 @@ class Remax(BaseProvider):
             'internal_id': internal_id,
             'provider': self.provider_name
         }
-
-    def get_next_page_link(self, page_link, page):
-        u = urlparse(page_link)
-        params = parse_qs(u.query)
-        params['CurrentPage'] = page  # change query param here
-        res = ParseResult(scheme=u.scheme, netloc=u.hostname, path=u.path,
-                          params=u.params, query=urlencode(params), fragment=u.fragment)
-        return res.geturl()
