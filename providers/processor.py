@@ -3,6 +3,7 @@ import sqlite3
 
 from providers.argenprop import Argenprop
 from providers.bonifacio import Bonifacio
+from providers.ienco import Ienco
 from providers.inmobusqueda import Inmobusqueda
 from providers.mercadolibre import Mercadolibre
 from providers.properati import Properati
@@ -55,6 +56,8 @@ def get_instance(provider_name, provider_data):
         return Argenprop(provider_name, provider_data)
     elif provider_name == 'bonifacio':
         return Bonifacio(provider_name, provider_data)
+    elif provider_name == 'ienco':
+        return Ienco(provider_name, provider_data)
     elif provider_name == 'inmobusqueda':
         return Inmobusqueda(provider_name, provider_data)
     elif provider_name == 'mercadolibre':

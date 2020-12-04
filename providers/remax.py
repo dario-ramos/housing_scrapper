@@ -33,7 +33,7 @@ class Remax(BaseProvider):
                 break
 
             if page_count == None:
-                page_count = self.getPageCount(page_content)
+                page_count = self.get_page_count(page_content)
 
             for prop in properties:
                 yield self.scrape_property(prop)
@@ -63,7 +63,7 @@ class Remax(BaseProvider):
         page_content = BeautifulSoup(driver.page_source, 'lxml')
         return (page_content.find_all('div', class_='gallery-item-container'), page_content)
 
-    def getPageCount(self, page_content):
+    def get_page_count(self, page_content):
         paginator = page_content.find('ul', class_='pagination')
         if paginator == None:
             return 1
