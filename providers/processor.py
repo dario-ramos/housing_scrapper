@@ -1,5 +1,6 @@
 import logging
-import sqlite3
+from .repository import SqliteRepository
+from .model import Property
 
 from providers.argenprop import Argenprop
 from providers.bonifacio import Bonifacio
@@ -26,26 +27,16 @@ def process_properties(provider_name, provider_data):
 
     new_properties = []
 
-    # db connection
-    conn = sqlite3.connect('properties.db')
-
-    # Check to see if we know it
-    stmt = 'SELECT * FROM properties WHERE internal_id=:internal_id AND provider=:provider'
-
     prop_count = 0
-    with conn:
+
+    with SqliteRepository('properties.db') as repo:
         for prop in provider.next_prop():
-            cur = conn.cursor()
-            logging.info(f"Processing property {prop['internal_id']}")
-            cur.execute(
-                stmt, {'internal_id': prop['internal_id'], 'provider': prop['provider']})
-            result = cur.fetchone()
-            cur.close()
+            result = repo.get(prop['internal_id'], prop['provider'])
             if result == None:
                 # Insert and save for notification
                 logging.info('It is a new one')
                 prop_count += 1
-                register_property(conn, prop)
+                repo.add(prop)
                 new_properties.append(prop)
 
     return new_properties
