@@ -23,6 +23,7 @@ class SqliteRepository(AbstractRepository):
     def add(self, prop):
         stmt = 'INSERT INTO properties (internal_id, provider, url) VALUES (:internal_id, :provider, :url)'
         self.conn.execute(stmt, prop)
+        self.conn.commit()
 
     def get(self, internal_id, provider) -> Property:
         stmt = 'SELECT * FROM properties WHERE internal_id=:internal_id AND provider=:provider'
