@@ -9,4 +9,5 @@ providers:
         base_url: <URL>
         sources:
           - <PATH>
-
+database:
+    store: '<localsqlite|herokupg>' 

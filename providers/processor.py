@@ -1,5 +1,4 @@
 import logging
-from .repository import SqliteRepository
 from .model import Property
 
 from providers.argenprop import Argenprop
@@ -14,22 +13,14 @@ from providers.urquiza import Urquiza
 from providers.zonaprop import Zonaprop
 
 
-def register_property(conn, prop):
-    stmt = 'INSERT INTO properties (internal_id, provider, url) VALUES (:internal_id, :provider, :url)'
-    try:
-        conn.execute(stmt, prop)
-    except Exception as e:
-        print(e)
-
-
-def process_properties(provider_name, provider_data):
+def process_properties(provider_name, provider_data, repository_factory):
     provider = get_instance(provider_name, provider_data)
 
     new_properties = []
 
     prop_count = 0
 
-    with SqliteRepository('properties.db') as repo:
+    with repository_factory() as repo:
         for prop in provider.next_prop():
             result = repo.get(prop['internal_id'], prop['provider'])
             if result == None:

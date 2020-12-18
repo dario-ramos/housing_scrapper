@@ -6,6 +6,7 @@ import sys
 import traceback
 from notifier import Notifier
 from providers.processor import process_properties
+from providers.repositoryfactory import get_factory
 
 # logging
 logging.basicConfig(
@@ -16,12 +17,14 @@ with open("configuration.yml", 'r') as ymlfile:
     cfg = yaml.safe_load(ymlfile)
 
 notifier = Notifier.get_instance(cfg['notifier'])
+repository_factory = get_factory(cfg['database'])
 
 new_prop_count = 0
 for provider_name, provider_data in cfg['providers'].items():
     try:
         logging.info(f"Processing provider {provider_name}")
-        new_properties = process_properties(provider_name, provider_data)
+        new_properties = process_properties(
+            provider_name, provider_data, repository_factory)
         if len(new_properties) > 0:
             logging.info(
                 f"Found {len(new_properties)} new properties for provider {provider_name} :)")
