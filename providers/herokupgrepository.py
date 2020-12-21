@@ -1,13 +1,11 @@
 from .repository import AbstractRepository
 from .model import Property
-import subprocess
+import os
 import psycopg2
 
 
 def getDbUriFromHeroku(heroku_app_name):
-    conn_info = subprocess.run(
-        ["heroku", "config:get", "DATABASE_URL", "-a", heroku_app_name], stdout=subprocess.PIPE)
-    return conn_info.stdout.decode('utf-8').strip()
+    return os.environ['DATABASE_URL']
 
 
 class HerokuPgRepository(AbstractRepository):
