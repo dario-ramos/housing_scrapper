@@ -9,6 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 import chromedriver_binary
 import logging
+import os
 import re
 
 
@@ -17,8 +18,12 @@ class Bonifacio(BaseProvider):
         page_link = self.provider_data['base_url'] + source
         page = 1
         page_count = None
-        driver_options = Options()
+        driver_options = webdriver.ChromeOptions()
         driver_options.headless = True
+        chrome_exec_shim = os.environ.get("GOOGLE_CHROME_BIN", "chromedriver")
+        driver_options._binary_location = chrome_exec_shim
+        driver_options.add_argument('--disable-gpu')
+        driver_options.add_argument('--no-sandbox')
         driver = webdriver.Chrome(options=driver_options)
         timeout = self.provider_data['timeout']
 
