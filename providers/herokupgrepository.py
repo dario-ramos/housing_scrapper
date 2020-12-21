@@ -16,7 +16,8 @@ class HerokuPgRepository(AbstractRepository):
     def add(self, prop):
         cur = self.conn.cursor()
         cur.execute(
-            "INSERT INTO properties (internal_id, provider, url) VALUES (%s, %s, %s)", prop)
+            "INSERT INTO properties (internal_id, provider, url) VALUES (%s, %s, %s)",
+            [prop['internal_id'], prop['provider'], prop['url']])
         self.conn.commit()
         cur.close()
 
