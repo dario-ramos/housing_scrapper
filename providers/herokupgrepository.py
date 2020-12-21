@@ -24,7 +24,7 @@ class HerokuPgRepository(AbstractRepository):
         cur = self.conn.cursor()
         stmt = 'SELECT * FROM properties WHERE internal_id=(%internal_id) AND provider=(%provider)'
         cur.execute(
-            stmt, {'internal_id': internal_id, 'provider': provider})
+            stmt, [internal_id, provider])
         result = cur.fetchone()
         cur.close()
         return result
