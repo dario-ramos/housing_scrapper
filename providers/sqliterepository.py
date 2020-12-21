@@ -4,7 +4,6 @@ import sqlite3
 
 
 class SqliteRepository(AbstractRepository):
-    conn = sqlite3.Connection
 
     def __init__(self, path_to_db):
         self.conn = sqlite3.connect(path_to_db)

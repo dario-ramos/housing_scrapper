@@ -10,4 +10,6 @@ providers:
         sources:
           - <PATH>
 database:
-    store: '<localsqlite|herokupg>' 
+    store: '<localsqlite|herokupg>'
+    # Option exclusive to herokupg store 
+    heroku_app_name: '<APP_NAME>' 
