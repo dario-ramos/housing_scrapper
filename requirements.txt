@@ -4,6 +4,7 @@ beautifulsoup4==4.7.1
 certifi==2019.3.9
 cffi==1.12.3
 chardet==3.0.4
+chromedriver-binary==87.0.4280.88
 cloudscraper==1.2.46
 cryptography==2.6.1
 future==0.17.1
@@ -17,6 +18,7 @@ psycopg2==2.8.6
 pycparser==2.19
 pylint==2.3.1
 pyparsing==2.4.7
+python-dotenv==0.15.0
 python-telegram-bot==11.1.0
 PyYAML==5.1
 requests==2.21.0
