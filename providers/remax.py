@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from providers.urlhelper import set_query_param
 
 from providers.base_provider import BaseProvider
+from .chromedriverhelper import get_chrome_driver_options
 
 import chromedriver_binary
 import logging
@@ -21,8 +22,7 @@ class Remax(BaseProvider):
     def props_in_source(self, source):
         page_link = self.provider_data['base_url'] + source
         page = 1
-        driver_options = Options()
-        driver_options.headless = True
+        driver_options = get_chrome_driver_options()
         driver = webdriver.Chrome(options=driver_options)
         timeout = self.provider_data['timeout']
         page_count = None
