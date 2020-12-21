@@ -17,8 +17,8 @@ class Config:
     def notifier_token(self):
         return os.environ['NOTIFIER_TOKEN']
 
-    def notifier_message(self):
-        return os.environ['NOTIFIER_MESSAGE']
+    def notifier_messages(self):
+        return [os.environ['NOTIFIER_MESSAGE']]
 
     def notifier_chat_id(self):
         return os.environ['NOTIFIER_CHAT_ID']

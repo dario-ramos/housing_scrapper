@@ -19,7 +19,7 @@ class Notifier(NullNotifier):
 
     def notify(self, properties):
         logging.info(f'Notifying about {len(properties)} properties')
-        text = np.random.choice(self.config.notifier_message())
+        text = np.random.choice(self.config.notifier_messages())
         self.bot.send_message(
             chat_id=self.config.notifier_chat_id(), text=text)
 
