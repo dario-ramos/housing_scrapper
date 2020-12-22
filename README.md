@@ -1,10 +1,10 @@
-# Housing scrapper
+# Housing scraper
 
 In my pursue of a new place to live, I was tired of having to remember which properties I've already checked, and also having to remember to go to the listings sites.
 
 When I started bookmarking the queries I did in every listing site I realized what I was doing could be easily automated, and voilà!
 
-Meet housing scrapper, an app that queries the listings sites for you and notifies you over Telegram when a new property shows up. It remembers the one it notified you about so you won't receive the same property again.
+Meet housing scraper, an app that queries the listings sites for you and notifies you over Telegram when a new property shows up. It remembers the one it notified you about so you won't receive the same property again.
 
 This initial version is aimed at the Argentinean market, therefore there are only providers that list housing in Argentina.
 
