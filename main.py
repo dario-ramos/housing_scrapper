@@ -1,27 +1,30 @@
 #!/usr/bin/env python
 
 import logging
-import yaml
 import sys
 import traceback
 from notifier import Notifier
+
 from providers.processor import process_properties
+from providers.repositoryfactory import get_factory
+from config import Config
 
 # logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # configuration
-with open("configuration.yml", 'r') as ymlfile:
-    cfg = yaml.safe_load(ymlfile)
+cfg = Config()
 
-notifier = Notifier.get_instance(cfg['notifier'])
+notifier = Notifier.get_instance(cfg)
+repository_factory = get_factory(cfg)
 
 new_prop_count = 0
-for provider_name, provider_data in cfg['providers'].items():
+for provider_name, provider_data in cfg.providers().items():
     try:
         logging.info(f"Processing provider {provider_name}")
-        new_properties = process_properties(provider_name, provider_data)
+        new_properties = process_properties(
+            provider_name, provider_data, repository_factory)
         if len(new_properties) > 0:
             logging.info(
                 f"Found {len(new_properties)} new properties for provider {provider_name} :)")

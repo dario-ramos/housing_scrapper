@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
+from .chromedriverhelper import get_chrome_driver_options
+import chromedriver_binary
 import logging
 import re
 from providers.base_provider import BaseProvider
@@ -16,10 +18,8 @@ class Mercadolibre(BaseProvider):
         page = 1
         page_count = None
         regex = r"(MLA-\d*)"
-        driver_options = Options()
-        driver_options.headless = True
-        driver = webdriver.Chrome(
-            options=driver_options, executable_path=self.provider_data['chromedriver'])
+        driver_options = get_chrome_driver_options()
+        driver = webdriver.Chrome(options=driver_options)
         timeout = self.provider_data['timeout']
 
         while(True):

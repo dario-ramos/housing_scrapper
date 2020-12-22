@@ -5,10 +5,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
-import logging
 from providers.urlhelper import set_query_param
 
 from providers.base_provider import BaseProvider
+from .chromedriverhelper import get_chrome_driver_options
+
+import chromedriver_binary
+import logging
 
 # Because Remax loads the results dynamically using Ajax, we need to use Selenium
 # webdriver to wait for those results to be loaded before trying to parse them
@@ -19,10 +22,8 @@ class Remax(BaseProvider):
     def props_in_source(self, source):
         page_link = self.provider_data['base_url'] + source
         page = 1
-        driver_options = Options()
-        driver_options.headless = True
-        driver = webdriver.Chrome(
-            options=driver_options, executable_path=self.provider_data['chromedriver'])
+        driver_options = get_chrome_driver_options()
+        driver = webdriver.Chrome(options=driver_options)
         timeout = self.provider_data['timeout']
         page_count = None
 

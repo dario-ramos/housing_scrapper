@@ -13,21 +13,22 @@ class NullNotifier:
 
 class Notifier(NullNotifier):
     def __init__(self, config):
-        logging.info(f"Setting up bot with token {config['token']}")
+        logging.info(f"Setting up bot with token {config.notifier_token()}")
         self.config = config
-        self.bot = telegram.Bot(token=self.config['token'])
+        self.bot = telegram.Bot(token=self.config.notifier_token())
 
     def notify(self, properties):
         logging.info(f'Notifying about {len(properties)} properties')
-        text = np.random.choice(self.config['messages'])
-        self.bot.send_message(chat_id=self.config['chat_id'], text=text)
+        text = np.random.choice(self.config.notifier_messages())
+        self.bot.send_message(
+            chat_id=self.config.notifier_chat_id(), text=text)
 
         for prop in properties:
             logging.info(f"Notifying about {prop['url']}")
 
             while True:
                 try:
-                    self.bot.send_message(chat_id=self.config['chat_id'],
+                    self.bot.send_message(chat_id=self.config.notifier_chat_id(),
                                           text=f"[{prop['title']}]({prop['url']})",
                                           parse_mode=telegram.ParseMode.MARKDOWN)
                     # TODO Make this configurable
@@ -42,7 +43,7 @@ class Notifier(NullNotifier):
 
     @staticmethod
     def get_instance(config):
-        if config['enabled']:
+        if config.notifier_enabled():
             return Notifier(config)
         else:
             return NullNotifier()
