@@ -6,7 +6,8 @@ import traceback
 from notifier import Notifier
 
 from providers.processor import process_properties
-from providers.repositoryfactory import get_factory
+from database.repositoryfactory import get_factory
+from errors.factory import create_error_handler
 from config import Config
 
 # logging
@@ -18,6 +19,7 @@ cfg = Config()
 
 notifier = Notifier.get_instance(cfg)
 repository_factory = get_factory(cfg)
+error_handler = create_error_handler(cfg.error_handler(), notifier)
 
 new_prop_count = 0
 for provider_name, provider_data in cfg.providers().items():
@@ -34,8 +36,6 @@ for provider_name, provider_data in cfg.providers().items():
             logging.info(
                 f"No new properties found for provider {provider_name} :(")
     except Exception as e:
-        logging.error(
-            f"Error processing provider {provider_name}.\n{sys.exc_info()[0]}")
-        print(''.join(traceback.format_exception(None, e, e.__traceback__)))
+        error_handler.handle_exception(f"Error in provider {provider_name}", e)
 
 logging.info(f"Done! Found a total of {new_prop_count} new properties")

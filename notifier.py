@@ -41,6 +41,18 @@ class Notifier(NullNotifier):
                     # TODO Make this configurable
                     time.sleep(30)
 
+    def notify_error(self, msg):
+        try:
+            self.bot.send_message(chat_id=self.config.notifier_chat_id(),
+                                  text=f"<code>{msg}</code>",
+                                  parse_mode=telegram.ParseMode.HTML)
+        except telegram.TelegramError as e:
+            logging.warn(e)
+            logging.info(
+                "Hit Telegram rate limit, will sleep for 30 seconds and retry")
+            # TODO Make this configurable
+            time.sleep(30)
+
     @staticmethod
     def get_instance(config):
         if config.notifier_enabled():
