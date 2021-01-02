@@ -26,20 +26,34 @@ class Notifier(NullNotifier):
         for prop in properties:
             logging.info(f"Notifying about {prop['url']}")
 
-            while True:
+            for i in range(1, self.config.notifier_max_retry()):
                 try:
                     self.bot.send_message(chat_id=self.config.notifier_chat_id(),
                                           text=f"[{prop['title']}]({prop['url']})",
                                           parse_mode=telegram.ParseMode.MARKDOWN)
-                    # TODO Make this configurable
-                    time.sleep(10)
+                    time.sleep(self.config.notifier_lapse())
                     break
                 except telegram.TelegramError as e:
-                    logging.warn(e)
-                    logging.info(
-                        "Hit Telegram rate limit, will sleep for 30 seconds and retry")
-                    # TODO Make this configurable
-                    time.sleep(30)
+                    self.handle_tg_error(e)
+
+    def notify_error(self, msg):
+
+        for i in range(1, self.config.notifier_max_retry()):
+            try:
+                self.bot.send_message(chat_id=self.config.notifier_chat_id(),
+                                      text=f"<code>{msg}</code>",
+                                      parse_mode=telegram.ParseMode.HTML)
+                time.sleep(self.config.notifier_lapse())
+                break
+            except telegram.TelegramError as e:
+                self.handle_tg_error(e)
+
+    def handle_tg_error(self, e):
+        tg_backoff = 30
+        logging.warn(e)
+        logging.info(
+            f"Hit Telegram rate limit, will sleep for {tg_backoff} seconds and retry")
+        time.sleep(tg_backoff)
 
     @staticmethod
     def get_instance(config):

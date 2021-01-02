@@ -1,5 +1,5 @@
 import logging
-from .model import Property
+from database.model import Property
 
 from providers.argenprop import Argenprop
 from providers.bonifacio import Bonifacio
