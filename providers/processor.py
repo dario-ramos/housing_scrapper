@@ -2,6 +2,7 @@ import logging
 from database.model import Property
 
 from providers.argenprop import Argenprop
+from providers.bertoia import Bertoia
 from providers.bonifacio import Bonifacio
 from providers.ienco import Ienco
 from providers.inmobusqueda import Inmobusqueda
@@ -36,6 +37,8 @@ def process_properties(provider_name, provider_data, repository_factory):
 def get_instance(provider_name, provider_data):
     if provider_name == 'argenprop':
         return Argenprop(provider_name, provider_data)
+    elif provider_name == 'bertoia':
+        return Bertoia(provider_name, provider_data)
     elif provider_name == 'bonifacio':
         return Bonifacio(provider_name, provider_data)
     elif provider_name == 'ienco':
