@@ -64,4 +64,8 @@ class Bertoia(BaseProvider):
         if paginator == None:
             return ""
 
-        return paginator.find('a', class_='next')['href']
+        next_button = paginator.find('a', class_='next')
+        if next_button == None:
+            return ""
+
+        return next_button['href']
