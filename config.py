@@ -23,6 +23,12 @@ class Config:
     def notifier_chat_id(self):
         return os.environ['NOTIFIER_CHAT_ID']
 
+    def notifier_lapse(self):
+        return float(os.environ['NOTIFIER_LAPSE'])
+
+    def notifier_max_retry(self):
+        return int(os.environ['NOTIFIER_MAX_RETRY'])
+
     def database_store(self):
         return os.environ['DATABASE_STORE']
 
