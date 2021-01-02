@@ -32,6 +32,8 @@ class Bertoia(BaseProvider):
 
         page_content = BeautifulSoup(page_response.content, 'lxml')
         container = page_content.find('div', id='grid-view')
+        if container == None:
+            return [], page_content
         return (container.find_all('div', class_='property-item'), page_content)
 
     def scrape_property(self, prop, source):
