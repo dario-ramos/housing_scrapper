@@ -1,5 +1,5 @@
 /.env
-/properties.db
+/*.db
 /**/__pycache__
 /.vscode
 /.idea

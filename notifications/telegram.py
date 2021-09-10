@@ -11,7 +11,7 @@ class NullNotifier:
         pass
 
 
-class Notifier(NullNotifier):
+class TelegramNotifier(NullNotifier):
     def __init__(self, config):
         logging.info(f"Setting up bot with token {config.notifier_token()}")
         self.config = config
