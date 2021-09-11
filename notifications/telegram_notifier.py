@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import telegram
 import logging
 import numpy as np
@@ -58,6 +56,6 @@ class TelegramNotifier(NullNotifier):
     @staticmethod
     def get_instance(config):
         if config.notifier_enabled():
-            return Notifier(config)
+            return TelegramNotifier(config)
         else:
             return NullNotifier()
