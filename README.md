@@ -10,6 +10,7 @@
       - [2.3.2. Heroku-hosted PostgreSQL](#232-heroku-hosted-postgresql)
   - [3. Running locally](#3-running-locally)
   - [4. Running in Heroku](#4-running-in-heroku)
+  - [Acceptance tests](#acceptance-tests)
 
 In my pursue of a new place to live, I was tired of having to remember which properties I had already checked, and also having to remember to go to the listings sites.
 
@@ -236,3 +237,9 @@ CREATE TABLE IF NOT EXISTS properties (id serial PRIMARY KEY, internal_id text N
 the application. Also, make sure to set DATABASE_STORE to 'herokupg' and HEROKU_APP_NAME to match the Heroku app name as shown in its settings.
 
 7) Add a Heroku scheduling plugin (there are many free options) to schedule the app to run with the desired frequency.
+
+## Acceptance tests
+
+These are implemented using gherkin and the behave module. To run them, just enter the command `behave` in the project root directory. These tests create a local sqlite database, which is deleted after the test run. They send their Telegram notifications to a test bot created specifically for testing; you can find its token and a group chat id in `features/steps/scraping.py`, in the function decorated with `@given('we have a test configuration with sqlite store and Telegram notifications')`.
+
+Acceptance tests are meant to run in an environment as close as possible to production; that's why a real database and telegram bot are used. In the future, other kinds of tests should be added to ensure a higher quality.
