@@ -1,37 +1,14 @@
-import logging
-from database.model import Property
-
-from providers.argenprop import Argenprop
-from providers.bertoia import Bertoia
-from providers.bonifacio import Bonifacio
-from providers.ienco import Ienco
-from providers.inmobusqueda import Inmobusqueda
-from providers.mercadolibre import Mercadolibre
-from providers.properati import Properati
-from providers.remax import Remax
-from providers.rogliano import Rogliano
-from providers.urquiza import Urquiza
-from providers.zonaprop import Zonaprop
-
-
-def process_properties(provider_name, provider_data, repository_factory):
-    provider = get_instance(provider_name, provider_data)
-
-    new_properties = []
-
-    prop_count = 0
-
-    with repository_factory() as repo:
-        for prop in provider.next_prop():
-            result = repo.get(prop['internal_id'], prop['provider'])
-            if result == None:
-                # Insert and save for notification
-                logging.info('It is a new one')
-                prop_count += 1
-                repo.add(prop)
-                new_properties.append(prop)
-
-    return new_properties
+from .argenprop import Argenprop
+from .bertoia import Bertoia
+from .bonifacio import Bonifacio
+from .ienco import Ienco
+from .inmobusqueda import Inmobusqueda
+from .mercadolibre import Mercadolibre
+from .properati import Properati
+from .remax import Remax
+from .rogliano import Rogliano
+from .urquiza import Urquiza
+from .zonaprop import Zonaprop
 
 
 def get_instance(provider_name, provider_data):

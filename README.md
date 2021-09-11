@@ -10,6 +10,7 @@
       - [2.3.2. Heroku-hosted PostgreSQL](#232-heroku-hosted-postgresql)
   - [3. Running locally](#3-running-locally)
   - [4. Running in Heroku](#4-running-in-heroku)
+  - [Acceptance tests](#acceptance-tests)
 
 In my pursue of a new place to live, I was tired of having to remember which properties I had already checked, and also having to remember to go to the listings sites.
 
@@ -34,7 +35,8 @@ In Linux, this might fail if you don't have some libraries. Install them like th
 
 ## 2. Configuration
 
-There's a `sample.env` file that you can use as a template for your configuration. Copy that file to a new one in the root folder and name it `.env`
+There's a `sample.env` file that you can use as a template for your configuration. It also documents the meaning of each configuration key.
+ Copy that file to a new one in the root folder, name it `.env` and start editing its values.
 
 You need to configure two aspects of the script: the listing providers and the notifier.
 
@@ -46,19 +48,11 @@ Creating the bot will give you an authorization token. Save it for later, you'll
 
 A bot can't talk with you directly, you have two options: you talk to it first, thus allowing it to reply to you, or you can add it to a group. Whatever option you choose, you need to get the `chat_id` of either your account or the group.
 
-After you've done either of the above, run this little script to find the `chat_id` (replace with your authorization token):
+After you've done either of the above, run the script in `notification/chat_id.py`. You'll see a list with an element, that's the `chat_id` you need to save for later. Write it down :-)
 
-```python
-import telegram
-bot = telegram.Bot(token=MY_TOKEN)
-print([u.message.chat.id for u in bot.get_updates()])
-```
-You'll see a list with an element, that's the `chat_id` you need to save for later. Write it down :-)
-
-With the authorization token and the chat id you can now configure the notifier. Here's an example:
+With the authorization token and the chat id you can now configure the notifier. Here's an example (showing only the keys you need to set):
 
 ```
-NOTIFIER_ENABLED = 1
 NOTIFIER_TOKEN = <TOKEN>
 NOTIFIER_CHAT_ID = <CHAT_ID>
 ```
@@ -188,7 +182,7 @@ PROVIDER11_S5 = '/villa-elisa/?orden=0&offset=5&view=1&tp=1&dm=&bn=&m=ARS&vc_min
 Notice that:
 
 * All provider keys follow a naming structure: PROVIDER<NUMBER>_<KEY_NAME>. All keys with the same NUMBER belong to the same provider. 
-* The NAME key univocally identifies the provider. It must be one of the pre-built ones; see the `get_instance` function in `providers/processor.py` for a list.
+* The NAME key univocally identifies the provider. It must be one of the pre-built ones; see the `get_instance` function in `providers/factory.py` for a list.
 * The BASE_URL key is the common part of the url for all listing queries. It's tipically the home page url for the listing site.
 * The S1, S2, ... keys are sources. Each of them is a listing query. Each provider can have an arbitrary number of these; they can be set up by city, housing type or any filter that the listing site provides.
 * Some providers have a TIMEOUT key. This is a maximum time in seconds to allow for scraping a singular source. This is sometimes necessary because some listing sites can be unreliable or not very amenable to scraping, and cannot be waited on forever.
@@ -202,7 +196,7 @@ There are two options, defined by the DATABASE_STORE key:
 
 #### 2.3.1. SQLite
 
-To initialize the database, just run `python3 setup.py` and that's it. It will create a sqlite3 db (`properties.db`) file in the root folder, and the notified listings will be saved there. Simply delete this file and run setup.py again to reset the database.
+To initialize the database, just run `python3 database/initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
 
 #### 2.3.2. Heroku-hosted PostgreSQL
 
@@ -243,3 +237,9 @@ CREATE TABLE IF NOT EXISTS properties (id serial PRIMARY KEY, internal_id text N
 the application. Also, make sure to set DATABASE_STORE to 'herokupg' and HEROKU_APP_NAME to match the Heroku app name as shown in its settings.
 
 7) Add a Heroku scheduling plugin (there are many free options) to schedule the app to run with the desired frequency.
+
+## Acceptance tests
+
+These are implemented using gherkin and the behave module. To run them, just enter the command `behave` in the project root directory. These tests create a local sqlite database, which is deleted after the test run. They send their Telegram notifications to a test bot created specifically for testing; you can find its token and a group chat id in `features/steps/scraping.py`, in the function decorated with `@given('we have a test configuration with sqlite store and Telegram notifications')`.
+
+Acceptance tests are meant to run in an environment as close as possible to production; that's why a real database and telegram bot are used. In the future, other kinds of tests should be added to ensure a higher quality.

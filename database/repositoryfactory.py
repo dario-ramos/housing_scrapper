@@ -4,7 +4,7 @@ from .herokupgrepository import HerokuPgRepository, getDbUriFromHeroku
 
 def get_factory(cfg):
     def create_sql_lite_repository():
-        return SqliteRepository('properties.db')
+        return SqliteRepository(cfg.local_sqlite_file())
 
     def create_herokupg_repository():
         conn_uri = getDbUriFromHeroku(cfg.heroku_app_name())

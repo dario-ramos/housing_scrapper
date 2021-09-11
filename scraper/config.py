@@ -5,10 +5,10 @@ from pathlib import Path
 
 class Config:
 
-    def __init__(self):
-        env_file = Path(".env")
+    def __init__(self, env_file_path=".env"):
+        env_file = Path(env_file_path)
         if env_file.is_file():
-            load_dotenv(dotenv_path=".env")
+            load_dotenv(dotenv_path=env_file_path)
         self.providers_dict = self.read_providers_from_env()
 
     def notifier_enabled(self):
@@ -31,6 +31,9 @@ class Config:
 
     def database_store(self):
         return os.environ['DATABASE_STORE']
+
+    def local_sqlite_file(self):
+        return os.environ['LOCAL_SQLITE_FILE']
 
     def heroku_app_name(self):
         return os.environ['HEROKU_APP_NAME']

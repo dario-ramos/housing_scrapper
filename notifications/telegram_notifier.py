@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import telegram
 import logging
 import numpy as np
@@ -11,7 +9,7 @@ class NullNotifier:
         pass
 
 
-class Notifier(NullNotifier):
+class TelegramNotifier(NullNotifier):
     def __init__(self, config):
         logging.info(f"Setting up bot with token {config.notifier_token()}")
         self.config = config
@@ -58,6 +56,6 @@ class Notifier(NullNotifier):
     @staticmethod
     def get_instance(config):
         if config.notifier_enabled():
-            return Notifier(config)
+            return TelegramNotifier(config)
         else:
             return NullNotifier()
