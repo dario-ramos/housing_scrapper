@@ -189,18 +189,15 @@ Notice that:
 
 ### 2.3. Database
 
-There are two options, defined by the DATABASE_STORE key:
+There is only one option now, defined by the DATABASE_STORE key:
 
 * localsqlite: Local SQLite database.
-* herokupg: Remote Heroku-hosted PostgreSQL database.
+
+We used to support Heroku, but it's gone. So it will be just local sqlite until we find a new free alternative. Although we will probably just keep a pc on running the sqlite version all day.
 
 #### 2.3.1. SQLite
 
 To initialize the database, just run `python3 database/initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
-
-#### 2.3.2. Heroku-hosted PostgreSQL
-
-See the "connecting to Heroku" section.
 
 ## 3. Running locally
 
@@ -208,35 +205,6 @@ This can be done by calling main.py manually, or using something like crontab to
 
 `0 * * * * cd /<PATH_TO_PROJECT>/housing_tracker && python3 main.py >> run.log 2>&1`
 
-
-## 4. Running in Heroku
-
-If having your PC online 24/7 is not an option, hosting the app in Heroku is a good solution. In that case, the database store must be PostgreSQL, because that's the engine that Heroku favors. To get the app running in Heroku:
-
-0) Create a Heroku application via the Heroku web UI or CLI, and provision a Postgres database for it. Connect this Github repo to that app, and deploy it to Heroku via Github.
-
-1) Install psql client (Linux)
-
-2) Get host, user name and password to access database from the Heroku web UI
-   (Open the database in data.heroku.com, and go to Settings-Database credentials)
-
-3) From any command line, connect to the Postgres database:
-
-`psql -h <host> -U <user> <db_name>`
-
-4) In the terminal, now SQL queries can be entered directly. Run the following one to create the properties table.
-
-```
-CREATE TABLE IF NOT EXISTS properties (id serial PRIMARY KEY, internal_id text NOT NULL, provider text NOT NULL, url text NOT NULL, captured_date TIMESTAMP WITHOUT TIME ZONE default NOW());
-```
-
-5) It might take a few minutes for the table creation to reflect in Heroku, but it will
-   if it doesn't error out in the terminal client
-
-6) Set all the environment variables from .sample.env in the Heroku application settings. Verify that DATABASE_URL is set, so that the database can be accessed from
-the application. Also, make sure to set DATABASE_STORE to 'herokupg' and HEROKU_APP_NAME to match the Heroku app name as shown in its settings.
-
-7) Add a Heroku scheduling plugin (there are many free options) to schedule the app to run with the desired frequency.
 
 ## Acceptance tests
 
