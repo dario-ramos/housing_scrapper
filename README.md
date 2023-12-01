@@ -197,7 +197,7 @@ We used to support Heroku, but it's gone. So it will be just local sqlite until 
 
 #### 2.3.1. SQLite
 
-To initialize the database, just run `python3 database/initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
+To initialize the database, just run `python3 initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
 
 ## 3. Running locally
 
