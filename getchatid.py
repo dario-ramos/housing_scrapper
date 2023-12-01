@@ -10,3 +10,5 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+
+# TODO: Fix providers, especially the ones that use ChromeDriver
