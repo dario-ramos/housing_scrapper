@@ -15,22 +15,24 @@ class TelegramNotifier(NullNotifier):
         self.config = config
         self.bot = telegram.Bot(token=self.config.notifier_token())
 
-    def notify(self, properties):
+    async def notify(self, properties):
         logging.info(f'Notifying about {len(properties)} properties')
         text = np.random.choice(self.config.notifier_messages())
-        self.bot.send_message(
-            chat_id=self.config.notifier_chat_id(), text=text)
+        async with self.bot:
+            await self.bot.send_message(
+                chat_id=self.config.notifier_chat_id(), text=text)
 
         for prop in properties:
             logging.info(f"Notifying about {prop['url']}")
 
             for i in range(1, self.config.notifier_max_retry()):
                 try:
-                    self.bot.send_message(chat_id=self.config.notifier_chat_id(),
+                    async with self.bot:
+                        await self.bot.send_message(chat_id=self.config.notifier_chat_id(),
                                           text=f"[{prop['title']}]({prop['url']})",
-                                          parse_mode=telegram.ParseMode.MARKDOWN)
-                    time.sleep(self.config.notifier_lapse())
-                    break
+                                          parse_mode=telegram.constants.ParseMode.MARKDOWN)
+                        time.sleep(self.config.notifier_lapse())
+                        break
                 except telegram.TelegramError as e:
                     self.handle_tg_error(e)
 
