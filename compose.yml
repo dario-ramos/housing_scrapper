@@ -1,0 +1,5 @@
+services:
+  housing-scraper:
+    build: .
+    env_file:
+      - .env
