@@ -7,7 +7,7 @@ cffi==1.16.0
 chardet==3.0.4
 chromedriver-binary==87.0.4280.88
 cloudscraper==1.2.46
-cryptography==3.2
+cryptography==3.4.8
 future==0.17.1
 idna==2.8
 isort==4.3.17
