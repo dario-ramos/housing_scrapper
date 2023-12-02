@@ -14,7 +14,7 @@ class Scraper:
         self.error_handler = create_error_handler(
             cfg.error_handler(), self.notifier)
 
-    def scrape_all(self):
+    async def scrape_all(self):
 
         new_prop_count = 0
         for provider_name, provider_data in self.cfg.providers().items():
@@ -25,7 +25,7 @@ class Scraper:
                 if len(new_properties) > 0:
                     logger.info(
                         f"Found {len(new_properties)} new properties for provider {provider_name} :)")
-                    self.notifier.notify(new_properties)
+                    await self.notifier.notify(new_properties)
                     new_prop_count += len(new_properties)
                 else:
                     logger.info(

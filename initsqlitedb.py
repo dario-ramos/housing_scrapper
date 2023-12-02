@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-from .sqliterepository import SqliteRepository
+from database.sqliterepository import SqliteRepository
 
 SqliteRepository.initialize_database("properties.db")

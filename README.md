@@ -23,6 +23,7 @@ This initial version is aimed at the Argentinean market, therefore there are onl
 I'd love to receive comments, bugs, ideas, suggestion (I don't use Python daily, please help me be more pythonic if you'd like to), etc. File an issue in the repo to do so.
 
 ## 1. Installation
+
 This was tested with Python 3.8.
 
 To install dependencies:
@@ -36,7 +37,7 @@ In Linux, this might fail if you don't have some libraries. Install them like th
 ## 2. Configuration
 
 There's a `sample.env` file that you can use as a template for your configuration. It also documents the meaning of each configuration key.
- Copy that file to a new one in the root folder, name it `.env` and start editing its values.
+Copy that file to a new one in the root folder, name it `.env` and start editing its values.
 
 You need to configure two aspects of the script: the listing providers and the notifier.
 
@@ -48,7 +49,9 @@ Creating the bot will give you an authorization token. Save it for later, you'll
 
 A bot can't talk with you directly, you have two options: you talk to it first, thus allowing it to reply to you, or you can add it to a group. Whatever option you choose, you need to get the `chat_id` of either your account or the group.
 
-After you've done either of the above, run the script in `notification/chat_id.py`. You'll see a list with an element, that's the `chat_id` you need to save for later. Write it down :-)
+After you've done either of the above, copy and paste the authorization token into the script in `getchatid.py`, and run it. You'll see a JSON blob; look for the Chat object, and get its id field; that's the `chat_id` you need to save for later. Write it down :-)
+
+If `getchatid.py` fails with an index error, you are getting no updates. This can happen because your bot has been inactive for a long time. In the Telegram mobile app, go to Botfather and restart your bot. After a short while, you should be able to get updates and the chat id.
 
 With the authorization token and the chat id you can now configure the notifier. Here's an example (showing only the keys you need to set):
 
@@ -181,30 +184,29 @@ PROVIDER11_S5 = '/villa-elisa/?orden=0&offset=5&view=1&tp=1&dm=&bn=&m=ARS&vc_min
 
 Notice that:
 
-* All provider keys follow a naming structure: PROVIDER<NUMBER>_<KEY_NAME>. All keys with the same NUMBER belong to the same provider. 
-* The NAME key univocally identifies the provider. It must be one of the pre-built ones; see the `get_instance` function in `providers/factory.py` for a list.
-* The BASE_URL key is the common part of the url for all listing queries. It's tipically the home page url for the listing site.
-* The S1, S2, ... keys are sources. Each of them is a listing query. Each provider can have an arbitrary number of these; they can be set up by city, housing type or any filter that the listing site provides.
-* Some providers have a TIMEOUT key. This is a maximum time in seconds to allow for scraping a singular source. This is sometimes necessary because some listing sites can be unreliable or not very amenable to scraping, and cannot be waited on forever.
+- All provider keys follow a naming structure: PROVIDER<NUMBER>\_<KEY_NAME>. All keys with the same NUMBER belong to the same provider.
+- The NAME key univocally identifies the provider. It must be one of the pre-built ones; see the `get_instance` function in `providers/factory.py` for a list.
+- The BASE_URL key is the common part of the url for all listing queries. It's tipically the home page url for the listing site.
+- The S1, S2, ... keys are sources. Each of them is a listing query. Each provider can have an arbitrary number of these; they can be set up by city, housing type or any filter that the listing site provides.
+- Some providers have a TIMEOUT key. This is a maximum time in seconds to allow for scraping a singular source. This is sometimes necessary because some listing sites can be unreliable or not very amenable to scraping, and cannot be waited on forever.
 
 ### 2.3. Database
 
 There is only one option now, defined by the DATABASE_STORE key:
 
-* localsqlite: Local SQLite database.
+- localsqlite: Local SQLite database.
 
 We used to support Heroku, but it's gone. So it will be just local sqlite until we find a new free alternative. Although we will probably just keep a pc on running the sqlite version all day.
 
 #### 2.3.1. SQLite
 
-To initialize the database, just run `python3 database/initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
+To initialize the database, just run `python3 initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
 
 ## 3. Running locally
 
 This can be done by calling main.py manually, or using something like crontab to schedule it. For example, to run once every hour, the crontab file line to add would be:
 
 `0 * * * * cd /<PATH_TO_PROJECT>/housing_tracker && python3 main.py >> run.log 2>&1`
-
 
 ## Acceptance tests
 
