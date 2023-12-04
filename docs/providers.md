@@ -1,3 +1,5 @@
+# Providers configuration
+
 For the sake of simplicity I'll include a sample for each of the pre-built providers, which I hope will be good enough.
 
 Notice that:
