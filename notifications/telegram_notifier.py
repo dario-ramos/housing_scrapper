@@ -8,6 +8,9 @@ class NullNotifier:
     def notify(self, properties):
         pass
 
+    def notify_error(self, msg):
+        pass
+
 
 class TelegramNotifier(NullNotifier):
     def __init__(self, config):
@@ -29,8 +32,8 @@ class TelegramNotifier(NullNotifier):
                 try:
                     async with self.bot:
                         await self.bot.send_message(chat_id=self.config.notifier_chat_id(),
-                                          text=f"[{prop['title']}]({prop['url']})",
-                                          parse_mode=telegram.constants.ParseMode.MARKDOWN)
+                                                    text=f"[{prop['title']}]({prop['url']})",
+                                                    parse_mode=telegram.constants.ParseMode.MARKDOWN)
                         time.sleep(self.config.notifier_lapse())
                         break
                 except telegram.TelegramError as e:
@@ -42,10 +45,10 @@ class TelegramNotifier(NullNotifier):
             try:
                 self.bot.send_message(chat_id=self.config.notifier_chat_id(),
                                       text=f"<code>{msg}</code>",
-                                      parse_mode=telegram.ParseMode.HTML)
+                                      parse_mode=telegram.constants.ParseMode.HTML)
                 time.sleep(self.config.notifier_lapse())
                 break
-            except telegram.TelegramError as e:
+            except BaseException as e:  # TODO Use python-telegram-bot error handler
                 self.handle_tg_error(e)
 
     def handle_tg_error(self, e):

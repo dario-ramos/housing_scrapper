@@ -35,8 +35,26 @@ class Config:
     def local_sqlite_file(self):
         return os.environ['LOCAL_SQLITE_FILE']
 
-    def heroku_app_name(self):
-        return os.environ['HEROKU_APP_NAME']
+    def mysql_host(self):
+        return os.environ['MYSQL_HOST']
+
+    def mysql_port(self):
+        return int(os.environ['MYSQL_PORT'])
+
+    def mysql_db(self):
+        return os.environ['MYSQL_DB']
+
+    def mysql_user(self):
+        return os.environ['MYSQL_USER']
+
+    def mysql_password(self):
+        return os.environ['MYSQL_PASSWORD']
+
+    def mysql_charset(self):
+        return os.environ['MYSQL_CHARSET']
+
+    def mysql_timeout(self):
+        return int(os.environ['MYSQL_TIMEOUT'])
 
     def error_handler(self):
         return os.environ['ERROR_HANDLER']
