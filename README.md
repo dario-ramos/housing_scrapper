@@ -1,14 +1,15 @@
-# Housing scraper
+## About this project
 
-- [Housing scraper](#housing-scraper)
-  - [Configuration](#configuration)
-    - [Telegram notifier](#telegram-notifier)
-    - [Providers](#providers)
-    - [Database](#database)
-      - [SQLite](#sqlite)
-  - [Running locally](#running-locally)
-  - [Running inside a Docker container](#running-inside-a-docker-container)
-  - [Acceptance tests](#acceptance-tests)
+- [About this project](#about-this-project)
+- [Configuration](#configuration)
+  - [Telegram notifier](#telegram-notifier)
+  - [Providers](#providers)
+  - [Database](#database)
+    - [SQLite](#sqlite)
+    - [MySQL](#mysql)
+- [Running locally](#running-locally)
+- [Running inside a Docker container](#running-inside-a-docker-container)
+- [Acceptance tests](#acceptance-tests)
 
 In my pursue of a new place to live, I was tired of having to remember which properties I had already checked, and also having to remember to go to the listings sites.
 
@@ -61,6 +62,22 @@ We used to support Heroku, but it's gone. So it will be just local sqlite until 
 #### SQLite
 
 To initialize the database, just run `python3 initsqlitedb.py` and that's it. It will create a sqlite3 db file (by default, named `properties.db`) in the root folder, and the notified listings will be saved there. Simply delete this file and run the script again to reset the database.
+
+#### MySQL
+
+Database initialization should be performed manually in your server. Use this SQL snippet to create the table:
+
+```
+CREATE TABLE IF NOT EXISTS properties (
+    id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    internal_id text NOT NULL,
+    provider text NOT NULL,
+    url text NOT NULL,
+    captured_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Then, fill in the 7 keys in .env that start with the `MYSQL_` prefix. All those values should be obtainable from your server or hosting service.
 
 ## Running locally
 

@@ -14,7 +14,7 @@ In Linux, this might fail if you don't have some libraries. Install them like th
 
 If you're still getting errors, I recommend running via Docker, because all dependencies are handled automatically. However, if you still want to run the app locally, please file a Github isue and I will look into it.
 
-## Running locally
+## Running/scheduling
 
 This can be done by calling main.py manually, or using something like crontab to schedule it. For example, to run once every hour, the crontab file line to add would be:
 
