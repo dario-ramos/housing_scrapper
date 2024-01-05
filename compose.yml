@@ -1,5 +1,6 @@
 services:
   housing-scraper:
-    build: .
+    build:
+      dockerfile: generic.Dockerfile
     env_file:
       - .env
